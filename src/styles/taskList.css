@@ -1,0 +1,19 @@
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  padding: 1em;
+  border: 1px solid #ddd;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
+.task-field {
+  margin-bottom: 0.5em;
+}
+
+.task-field strong {
+  margin-right: 0.5em;
+}
