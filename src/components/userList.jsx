@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ProfileCard } from './profilecard';
 import useUserStore from '../store/userStore';
 import LoadingSpinner from './loadingSpinner';
+import { ErrorComponent } from './error';
 
 const UserList = () => {
   const { userList, fetchUserList, loading, error } = useUserStore();
@@ -22,8 +23,7 @@ const UserList = () => {
   const currentPageItems = userList.slice(startIndex, startIndex + itemsPerPage);
 
   if (loading) return <LoadingSpinner/>;
-  if (error) return <p>{error}</p>;
-
+  if (error) return <ErrorComponent error={error} />;
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

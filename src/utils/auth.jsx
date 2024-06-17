@@ -24,12 +24,12 @@ const getUserIdFromToken = () => {
 
 const isAdmin = () => {
   const decodedToken = decodeToken();
-  return decodedToken ? decodedToken.rol === "Administrador" : false; // Asegúrate de que el campo `rol` esté en el token
+  return decodedToken ? decodedToken.rol === "Administrador" : false;
 };
 
 const isUser = () => {
   const decodedToken = decodeToken();
-  return decodedToken ? decodedToken.rol === "Usuario" : false; // Asegúrate de que el campo `rol` esté en el token
+  return decodedToken ? decodedToken.rol === "Usuario" : false; 
 };
 
 const hasNoToken = () => {

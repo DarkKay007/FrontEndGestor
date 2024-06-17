@@ -74,7 +74,6 @@ const ProjectComponent = () => {
                 <p className="text-gray-900">{project.Descripcion}</p>
                 <p className="text-gray-900">Desde el {formatDate(project.FechaInicio)}</p>
                 <p className="text-gray-900">Hasta el {formatDate(project.FechaFin)}</p>
-                
               </div>
               <div>
                 <Button className="w-24" color="light" onClick={() => handleOpenUpdateModal(project)}>

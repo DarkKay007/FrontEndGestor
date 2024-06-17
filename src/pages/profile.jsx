@@ -1,44 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+import useProfileStore from "../store/profileStore";
 import Logout from "./logout";
-import { Modal, Button } from "flowbite-react";
+import { Modal, Button   } from "flowbite-react";
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
+  const { user, isLoading, fetchUser, updateUser } = useProfileStore();
   const [updatedUserData, setUpdatedUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Obtener el token de localStorage y decodificarlo
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      setUserId(decodedToken.id);
-    } else {
-      console.error("No token found");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!userId) return;
-
-    const fetchUser = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          `https://backend-2ktb.onrender.com/api/profile/${userId}`
-        );
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-      setIsLoading(false);
-    };
     fetchUser();
-  }, [userId]);
+  }, [fetchUser]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,17 +19,8 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post(
-        `https://backend-2ktb.onrender.com/api/profile/${userId}`,
-        updatedUserData
-      );
-      // Actualizar el estado del usuario con los datos actualizados
-      setUser((prevUser) => ({ ...prevUser, ...updatedUserData }));
-      setIsModalOpen(false); // Cerrar el modal después de la actualización
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
+    await updateUser(updatedUserData);
+    setIsModalOpen(false);
   };
 
   if (isLoading) return <></>;

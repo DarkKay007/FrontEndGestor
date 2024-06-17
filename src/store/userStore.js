@@ -105,21 +105,6 @@ const useUserStore = create((set) => ({
     }
   },
 
-
-  loginUser: async (user, password) => {
-    try {
-      const response = await axios.post('https://backend-2ktb.onrender.com/api/login', { user, password });
-      const newToken = response.data.token;
-      localStorage.setItem('token', newToken);
-      set({ token: newToken, isLoggedIn: true });
-      await useUserStore.getState().fetchUserList(); // Llama fetchUserList después de iniciar sesión
-      set({ message: "Inicio de sesión exitoso" });
-    } catch (error) {
-      console.error('Error logging in:', error);
-      set({ error: "Error al iniciar sesión. Por favor, verifica tus credenciales." });
-    }
-  },
-
   logoutUser: () => {
     localStorage.removeItem('token');
     set({ token: null, isLoggedIn: false, userList: [], message: "Sesión cerrada" });
