@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProfileCard } from './profilecard';
 import useUserStore from '../store/userStore';
+import LoadingSpinner from './loadingSpinner';
 
 const UserList = () => {
   const { userList, fetchUserList, loading, error } = useUserStore();
@@ -20,7 +21,7 @@ const UserList = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentPageItems = userList.slice(startIndex, startIndex + itemsPerPage);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner/>;
   if (error) return <p>{error}</p>;
 
   return (
@@ -38,17 +39,20 @@ const UserList = () => {
         >
           Previous
         </button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={`page-${index + 1}`}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 mx-1 ${
-              currentPage === index + 1 ? 'bg-yellow-700' : 'bg-yellow-500'
-            } text-white rounded hover:bg-yellow-700 transition duration-300`}
-          >
-            {index + 1}
-          </button>
-        ))}
+        {Array.from({ length: totalPages }, (_, index) => {
+          const pageIndex = index + 1;
+          return (
+            <button
+              key={pageIndex}
+              onClick={() => handlePageChange(pageIndex)}
+              className={`px-4 py-2 mx-1 ${
+                currentPage === pageIndex ? 'bg-yellow-700' : 'bg-yellow-500'
+              } text-white rounded hover:bg-yellow-700 transition duration-300`}
+            >
+              {pageIndex}
+            </button>
+          );
+        })}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}

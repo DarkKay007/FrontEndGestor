@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useProjectStore from '../store/useProjectStore';
-import getUserIdFromToken from '../utils/getUserFromToken';
+import {getUserIdFromToken} from '../utils/auth';
 
 const AddProjectButton = () => {
   const { addProject } = useProjectStore();
