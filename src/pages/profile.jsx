@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useProfileStore from "../store/profileStore";
 import Logout from "./logout";
-import { Modal, Button   } from "flowbite-react";
+import { Modal, Button } from "flowbite-react";
+import { isAdmin, isUser, hasNoToken, isTokenExpired } from "../utils/auth";
+import AccesoDenegado from "../components/accesoDenegado";
+import TokenExpirado from "../components/tokenExpirado";
 
 const Profile = () => {
   const { user, isLoading, fetchUser, updateUser } = useProfileStore();
@@ -24,6 +27,15 @@ const Profile = () => {
   };
 
   if (isLoading) return <></>;
+
+  if (isTokenExpired()) {
+    return <TokenExpirado />;
+  }
+
+  if (hasNoToken()) {
+    return <AccesoDenegado />;
+  }
+
   if (!user) return <p>User not found</p>;
 
   return (

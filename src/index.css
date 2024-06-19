@@ -10,9 +10,7 @@
   width: 100vw;
   height: 100vh;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #202020;
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,6 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 @keyframes bounce {
   0%, 100% {

@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import useProfileStore from "../store/profileStore";
 import NavLinks from "../components/nav-links";
 import { IoSettings } from "react-icons/io5";
-import { isAdmin, isUser, hasNoToken } from "../utils/auth";
-import "../styles/dashboard.css";
+import { isAdmin, isUser, hasNoToken, isTokenExpired } from "../utils/auth";
 import AccesoDenegado from "../components/accesoDenegado";
-import ReportPage from "../components/reportPage";
+import TokenExpirado from "../components/tokenExpirado";
+import LoadingSpinner from "../components/loadingSpinner";
+import "../styles/dashboard.css";
 
 function Dashboard() {
+  const { user, isLoading, fetchUser } = useProfileStore();
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+  if (isLoading) return <LoadingSpinner />;
+  if (!user) return <p>User not found</p>;
+
   return (
     <div className="container-dashboard">
       <div className="header-dashboard">
-        <div className="ico-dashboard">
-        </div>
+        <div className="ico-dashboard"></div>
         <div className="settings-dashboard">
           <IoSettings size={24} />
         </div>
@@ -22,17 +30,26 @@ function Dashboard() {
       <div className="main-dashboard-settings"></div>
       {isAdmin() ? (
         <div className="main-dashboard">
-          <h2>Welcome Admin!</h2>
-          <p>Here you can manage users, view reports, and configure settings.</p>
+          <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-sm mx-auto">
+            <h1 className="text-2xl font-bold text-gray-900">
+              Bienvenido <span className="text-yellow-500">{user.rol}</span>:{" "}
+              {user.user}!
+            </h1>
+          </div>
         </div>
       ) : isUser() ? (
         <div className="main-dashboard">
-          <h2>Welcome User!</h2>
-          <p>Here you can view your profile, manage your settings, and more.</p>
-          {/* Aquí puedes añadir más componentes específicos para el usuario */}
+          <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-sm mx-auto">
+            <h1 className="text-2xl font-bold text-gray-900">
+              Bienvenido <span className="text-yellow-500">{user.rol}</span>:{" "}
+              {user.user}!
+            </h1>
+          </div>
         </div>
       ) : hasNoToken() ? (
         <AccesoDenegado />
+      ) : isTokenExpired() ? (
+        <TokenExpirado />
       ) : null}
     </div>
   );

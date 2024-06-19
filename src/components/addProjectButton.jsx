@@ -41,7 +41,7 @@ const AddProjectButton = () => {
 
   return (
     <>
-      <button onClick={handleOpenAddModal} className="mb-4 bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition">
+      <button onClick={handleOpenAddModal} className=" bg-yellow-500 text-black relative w-full max-w-md p-4 rounded hover:bg-yellow-600 transition">
         Add New Project
       </button>
 
@@ -68,7 +68,7 @@ const AddProjectButton = () => {
                     id="name"
                     value={newProject.Nombre}
                     onChange={(e) => setNewProject({ ...newProject, Nombre: e.target.value })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Type project name"
                     required
                   />
@@ -81,7 +81,7 @@ const AddProjectButton = () => {
                     id="description"
                     value={newProject.Descripcion}
                     onChange={(e) => setNewProject({ ...newProject, Descripcion: e.target.value })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Type project description"
                     required
                   />
@@ -94,7 +94,7 @@ const AddProjectButton = () => {
                     id="start-date"
                     value={newProject.FechaInicio}
                     onChange={(e) => setNewProject({ ...newProject, FechaInicio: e.target.value })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     required
                     min={today}
                   />
@@ -107,14 +107,14 @@ const AddProjectButton = () => {
                     id="end-date"
                     value={newProject.FechaFin}
                     onChange={(e) => setNewProject({ ...newProject, FechaFin: e.target.value })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     required
                     min={today}
                   />
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                <button type="submit" className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                  Add Project
+                <button type="submit" className="w-full text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-800">
+                 Agregar nuevo proyecto
                 </button>
               </form>
             </div>

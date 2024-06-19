@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { ProfileCard } from './profilecard';
-import useUserStore from '../store/userStore';
-import LoadingSpinner from './loadingSpinner';
-import { ErrorComponent } from './error';
+import React, { useEffect, useState } from "react";
+import { ProfileCard } from "./profilecard";
+import useUserStore from "../store/userStore";
+import LoadingSpinner from "./loadingSpinner";
+import { ErrorComponent } from "./error";
 
 const UserList = () => {
   const { userList, fetchUserList, loading, error } = useUserStore();
@@ -20,14 +20,17 @@ const UserList = () => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentPageItems = userList.slice(startIndex, startIndex + itemsPerPage);
+  const currentPageItems = userList.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  if (loading) return <LoadingSpinner/>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <ErrorComponent error={error} />;
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {currentPageItems.map(user => (
+        {currentPageItems.map((user) => (
           <ProfileCard key={user._id} user={user} />
         ))}
       </div>
@@ -43,16 +46,17 @@ const UserList = () => {
           const pageIndex = index + 1;
           return (
             <button
-              key={pageIndex}
+              key={pageIndex} // Aseguramos que la key sea única para cada botón
               onClick={() => handlePageChange(pageIndex)}
               className={`px-4 py-2 mx-1 ${
-                currentPage === pageIndex ? 'bg-yellow-700' : 'bg-yellow-500'
+                currentPage === pageIndex ? "bg-yellow-700" : "bg-yellow-500"
               } text-white rounded hover:bg-yellow-700 transition duration-300`}
             >
               {pageIndex}
             </button>
           );
         })}
+
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
