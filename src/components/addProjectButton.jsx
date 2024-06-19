@@ -20,7 +20,7 @@ const AddProjectButton = () => {
       setError('No se pudo obtener el ID del usuario.');
       return;
     }
-    const projectToAdd = { ...newProject, Creador: userId, Asignados: [userId] };
+    const projectToAdd = { ...newProject};
 
     setError(null);
     addProject(projectToAdd);

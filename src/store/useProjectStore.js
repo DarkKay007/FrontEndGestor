@@ -76,13 +76,13 @@ const useProjectStore = create(
 
       updateProject: async (id, projectData) => {
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem('token');
           const response = await axios.put(
             `https://backend-2ktb.onrender.com/api/projects/${id}`,
             projectData,
             {
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
               },
             }
@@ -101,9 +101,21 @@ const useProjectStore = create(
             ),
           }));
         } catch (error) {
-          console.error("Error updating project:", error);
+          if (error.response) {
+            // El servidor respondió con un código de estado que no está en el rango de 2xx
+            console.error('Error updating project:', error.response.data);
+            console.error('Status:', error.response.status);
+            console.error('Headers:', error.response.headers);
+          } else if (error.request) {
+            // La solicitud se hizo pero no se recibió ninguna respuesta
+            console.error('Error updating project: No response received', error.request);
+          } else {
+            // Algo pasó al configurar la solicitud que provocó un error
+            console.error('Error updating project:', error.message);
+          }
         }
       },
+      
 
       deleteProject: async (id) => {
         try {
