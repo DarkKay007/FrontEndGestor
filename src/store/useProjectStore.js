@@ -1,7 +1,9 @@
+// useProjectStore.js
+
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";  
+import { jwtDecode } from "jwt-decode";
 
 const useProjectStore = create(
   persist(
@@ -9,6 +11,7 @@ const useProjectStore = create(
       projects: [],
       assignedProjects: [],
       createdProjects: [],
+      projectDetails: [], // Agregamos projectDetails como un arreglo inicialmente vacío
       token: localStorage.getItem("token") || null,
       isLoggedIn: !!localStorage.getItem("token"),
       user: localStorage.getItem("token")
@@ -17,39 +20,50 @@ const useProjectStore = create(
       isAdmin: localStorage.getItem("token")
         ? jwtDecode(localStorage.getItem("token")).rol === "Administrador"
         : false,
-
-      fetchProjects: async () => {
-        try {
-          const token = localStorage.getItem("token");
-          const response = await axios.get(
-            "https://backend-2ktb.onrender.com/api/projects",
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
+        fetchProjects: async () => {
+          try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get(
+              "https://backend-2ktb.onrender.com/api/projects",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+        
+            const projects = response.data;
+            const user = get().user;
+        
+            if (user) {
+              const isAdmin = user.rol === "Administrador";
+              const assignedProjects = isAdmin
+                ? projects
+                : projects.filter((project) =>
+                    project.assignedTo?.includes(user.id)
+                  );
+              const createdProjects = projects.filter(
+                (project) => project.createdBy === user.id
+              );
+        
+              console.log("User:", user); // Debug: Check user information
+              console.log("Projects:", projects); // Debug: Check fetched projects
+              console.log("Assigned Projects:", assignedProjects); // Debug: Check assigned projects
+              console.log("Created Projects:", createdProjects); // Debug: Check created projects
+        
+              set({
+                projects,
+                assignedProjects,
+                createdProjects,
+                projectDetails: projects, // Inicializar projectDetails con los proyectos obtenidos
+              });
             }
-          );
-
-          const projects = response.data;
-          const user = get().user;
-
-          if (user) {
-            const isAdmin = user.rol === "Administrador";
-            const assignedProjects = isAdmin ? projects : projects.filter(project => project.assignedTo?.includes(user.id));
-            const createdProjects = projects.filter(project => project.createdBy === user.id);
-
-            set({
-              projects,
-              assignedProjects,
-              createdProjects,
-            });
+          } catch (error) {
+            console.error("Error fetching projects:", error);
           }
-        } catch (error) {
-          console.error("Error fetching projects:", error);
-        }
-      },
-
+        },
+        
       addProject: async (projectData) => {
         try {
           const token = localStorage.getItem("token");
@@ -144,12 +158,14 @@ const useProjectStore = create(
         }
       },
 
-      assignUsersToProject: async (id, userIds) => {
+      // Resto de las funciones del store
+
+      assignUsersToProject:  async (projectId, userIds, action) => {
         try {
           const token = localStorage.getItem("token");
-          await axios.put(
-            `https://backend-2ktb.onrender.com/api/projects/${id}/assign`,
-            { userIds },
+          const response = await axios.put(
+            `https://backend-2ktb.onrender.com/api/projects/${projectId}/assign`,
+            { userIds, action }, // Incluyendo `action` en el cuerpo de la solicitud
             {
               headers: {
                 "Content-Type": "application/json",
@@ -157,19 +173,33 @@ const useProjectStore = create(
               },
             }
           );
-
+      
+          // Actualizar el estado local después de asignar usuarios
           set((state) => ({
             projects: state.projects.map((project) =>
-              project._id === id ? { ...project, assignedTo: userIds } : project
+              project._id === projectId
+                ? { ...project, assignedTo: action === 'assign' ? [...project.assignedTo, ...userIds] : project.assignedTo.filter(userId => !userIds.includes(userId)) }
+                : project
             ),
             assignedProjects: state.assignedProjects.map((project) =>
-              project._id === id ? { ...project, assignedTo: userIds } : project
+              project._id === projectId
+                ? { ...project, assignedTo: action === 'assign' ? [...project.assignedTo, ...userIds] : project.assignedTo.filter(userId => !userIds.includes(userId)) }
+                : project
+            ),
+            projectDetails: state.projectDetails.map((project) =>
+              project._id === projectId
+                ? { ...project, assignedTo: action === 'assign' ? [...project.assignedTo, ...userIds] : project.assignedTo.filter(userId => !userIds.includes(userId)) }
+                : project
             ),
           }));
+      
+          console.log("Usuarios asignados correctamente al proyecto:", response.data);
         } catch (error) {
-          console.error("Error assigning users to project:", error);
+          console.error("Error asignando usuarios al proyecto:", error);
+          // Aquí podrías agregar manejo de errores más específico si es necesario
         }
       },
+      
     }),
     {
       name: "project-storage",

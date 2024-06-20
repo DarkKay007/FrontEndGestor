@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal} from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import useProjectStore from "../store/useProjectStore";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import AssignUsersModal from "../components/assignmentUser";
 
 const ProjectComponent = () => {
   const { projects, fetchProjects, updateProject, deleteProject } =
@@ -11,6 +12,7 @@ const ProjectComponent = () => {
   const projectsPerPage = 9; // Items per page
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAssignUsersModal, setShowAssignUsersModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
 
   const formatDate = (dateString) => {
@@ -69,6 +71,16 @@ const ProjectComponent = () => {
     handleCloseUpdateModal();
   };
 
+  const handleOpenAssignUsersModal = (project) => {
+    setSelectedProject(project);
+    setShowAssignUsersModal(true);
+  };
+
+  const handleCloseAssignUsersModal = () => {
+    setSelectedProject({});
+    setShowAssignUsersModal(false);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <ul className="projectList">
@@ -76,39 +88,44 @@ const ProjectComponent = () => {
           currentProjects.map((project) => (
             <li key={project._id} className="projectListUl bg-yellow-400">
               <div>
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-xl font-bold text-white">
                   {project.Nombre}
                 </h2>
-                <p className="text-gray-900">{project.Descripcion}</p>
-                <p className="text-gray-900">
+                <p className="text-gray-900 font-semibold">{project.Descripcion}</p>
+                <p className="text-gray-900 font-semibold">
                   Desde el {formatDate(project.FechaInicio)}
                 </p>
-                <p className="text-gray-900">
+                <p className="text-gray-900 font-semibold">
                   Hasta el {formatDate(project.FechaFin)}
                 </p>
               </div>
               <div>
                 <Button
-                  className="w-24"
+                  className="w-24 hover:bg-gray-400"
                   color="light"
                   onClick={() => handleOpenUpdateModal(project)}
                 >
                   Editar
                 </Button>
                 <Button
-                  className="w-24"
+                  className="w-24 hover:bg-red-900"
                   color="failure"
                   onClick={() => handleOpenDeleteModal(project)}
                 >
                   Eliminar
                 </Button>
                 <Link to={`/dashboard/project/${project._id}`}>
-                  <Button className="w-24 bg-green-700">Tareas</Button>
+                  <Button className="w-24 bg-green-700 hover:bg-green-900">Tareas</Button>
                 </Link>
+                <Link to={`/dashboard/project/${project._id}/assign-users`}>
+                  <Button className="w-24 bg-indigo-700 hover:bg-indigo-900">Usuarios</Button>
+                </Link>
+
               </div>
             </li>
           ))}
       </ul>
+      
       <div className="flex justify-center mt-4">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
@@ -300,6 +317,14 @@ const ProjectComponent = () => {
             </div>
           </Modal.Body>
         </Modal>
+      )}
+
+      {showAssignUsersModal && (
+        <AssignUsersModal
+          show={showAssignUsersModal}
+          onClose={handleCloseAssignUsersModal}
+          projectId={selectedProject._id}
+        />
       )}
     </div>
   );

@@ -45,7 +45,7 @@ function DashboardUsers() {
             className="bg-yellow-500 relative w-full max-w-md p-4 rounded-lg shadow-lg text-gray-900"
             onClick={() => setOpenAddUserModal(true)}
           >
-            Agregar Usuario
+            Agregar nuevo usuario
           </button>
         </div>
         <div className="main-dashboard">

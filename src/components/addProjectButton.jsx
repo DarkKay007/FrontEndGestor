@@ -41,8 +41,8 @@ const AddProjectButton = () => {
 
   return (
     <>
-      <button onClick={handleOpenAddModal} className=" bg-yellow-500 text-black relative w-full max-w-md p-4 rounded hover:bg-yellow-600 transition">
-        Add New Project
+      <button onClick={handleOpenAddModal} className=" bg-yellow-500 text-black relative w-full max-w-md p-4 rounded-lg hover:bg-yellow-600 transition">
+        Agregar nuevo proyecto
       </button>
 
       {showAddModal && (

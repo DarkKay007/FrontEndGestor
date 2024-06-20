@@ -1,3 +1,5 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import NavLinks from "../components/nav-links";
 import { IoSettings } from "react-icons/io5";
 import "../styles/dashboard.css";
@@ -6,6 +8,7 @@ import TaskForm from "../components/taskform";
 import useTaskStore from "../store/taskStore";
 
 function DashboardTask() {
+  const { projectId } = useParams();
   const { addTask } = useTaskStore();
 
   return (
@@ -23,7 +26,7 @@ function DashboardTask() {
         <NavLinks />
       </div>
       <div className="main-dashboard-settings">
-        <TaskForm addTask={addTask} />
+        <TaskForm projectId={projectId} addTask={addTask} />
       </div>
       <div className="main-dashboard">
         <ProjectManagement />

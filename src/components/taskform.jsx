@@ -3,20 +3,27 @@ import useTaskStore from '../store/taskStore';
 
 const TaskForm = ({ projectId }) => {
   const { addTask } = useTaskStore();
-  const [newTask, setNewTask] = useState({ Nombre: '', Descripcion: '', FechaInicio: '', FechaFin: '', Estado: 'En Curso' });
+  const [newTask, setNewTask] = useState({ Nombre: '', Descripcion: '', FechaInicio: '', FechaFin: '', Estado: 'en curso' });
   const [showAddModal, setShowAddModal] = useState(false);
   const [error, setError] = useState(null);
 
   const handleAddTask = async (e) => {
     e.preventDefault();
     const today = new Date().toISOString().split('T')[0];
+
     if (newTask.FechaInicio < today || newTask.FechaFin < today) {
       setError('Las fechas no pueden ser anteriores a la fecha actual.');
       return;
     }
+
+    if (newTask.FechaInicio > newTask.FechaFin) {
+      setError('La fecha de inicio no puede ser posterior a la fecha de fin.');
+      return;
+    }
+
     try {
       await addTask({ ...newTask, ID_Proyecto: projectId });
-      setNewTask({ Nombre: '', Descripcion: '', FechaInicio: '', FechaFin: '', Estado: 'En Curso' });
+      setNewTask({ Nombre: '', Descripcion: '', FechaInicio: '', FechaFin: '', Estado: 'en curso' });
       setShowAddModal(false);
     } catch (error) {
       console.error('Error adding task:', error);
@@ -63,7 +70,7 @@ const TaskForm = ({ projectId }) => {
                     name="name"
                     id="name"
                     value={newTask.Nombre}
-                    onChange={(e) => setNewTask({...newTask, Nombre: e.target.value })}
+                    onChange={(e) => setNewTask({ ...newTask, Nombre: e.target.value })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Type task name"
                     required
@@ -76,7 +83,7 @@ const TaskForm = ({ projectId }) => {
                     name="description"
                     id="description"
                     value={newTask.Descripcion}
-                    onChange={(e) => setNewTask({...newTask, Descripcion: e.target.value })}
+                    onChange={(e) => setNewTask({ ...newTask, Descripcion: e.target.value })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Type task description"
                     required
@@ -89,8 +96,8 @@ const TaskForm = ({ projectId }) => {
                     name="start-date"
                     id="start-date"
                     value={newTask.FechaInicio}
-                    onChange={(e) => setNewTask({...newTask, FechaInicio: e.target.value })}
-                    className="bg-gray-50 border border-gray-300text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    onChange={(e) => setNewTask({ ...newTask, FechaInicio: e.target.value })}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     required
                     min={today}
                   />
@@ -102,7 +109,7 @@ const TaskForm = ({ projectId }) => {
                     name="end-date"
                     id="end-date"
                     value={newTask.FechaFin}
-                    onChange={(e) => setNewTask({...newTask, FechaFin: e.target.value })}
+                    onChange={(e) => setNewTask({ ...newTask, FechaFin: e.target.value })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     required
                     min={today}

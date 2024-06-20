@@ -10,6 +10,7 @@ import Page404 from '../pages/404';
 import DashboardAssignment from '../pages/dashboardAssignment';
 import Profile from '../pages/profile';
 import TaskManagement from '../components/taskManagement ';
+import AssignUsersPage from '../components/assignmentUser';
 
 
 const AppRoutes = () => {
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route path="/dashboard/Assignment" element={<DashboardAssignment />} />
       <Route path="/dashboard/project/:projectId" element={<DashboardTask/>}/>
       <Route path="/dashboard/task/:taskId" element={<TaskManagement />} />
+      <Route path="/dashboard/project/:projectId/assign-users" element={<AssignUsersPage />} />
 
       <Route path="/logout" element={<Profile/>} />
 
